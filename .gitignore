@@ -5,4 +5,9 @@ database.db
 predictions.csv
 output.txt
 .env
+
+# Ignore all pickle files
 *.pkl
+
+# Allow AQI prediction model
+!models/aqi_prediction_model.pkl
