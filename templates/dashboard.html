@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<title>AQI Dashboard</title>
+
+<style>
+
+    .good{
+    color:green;
+}
+
+.moderate{
+    color:#d4a000;
+}
+
+.poor{
+    color:orange;
+}
+
+.severe{
+    color:red;
+}
+
+    nav{
+
+background:#1f2937;
+color:white;
+padding:15px;
+text-align:center;
+
+}
+
+body{
+    font-family: Arial;
+    background:#f4f7fb;
+}
+
+
+
+.header{
+    text-align:center;
+    padding:20px;
+}
+
+
+.cards{
+
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+
+}
+
+
+.card{
+
+    background:white;
+    width:220px;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,0.15);
+    transition:0.3s;
+
+}
+
+
+.card:hover{
+
+    transform:translateY(-10px);
+
+}
+
+
+.value{
+
+    font-size:35px;
+    font-weight:bold;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+   <nav style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#1f2937;
+padding:15px 30px;
+">
+
+<div style="color:white;font-size:24px;font-weight:bold;">
+🌍 Air Quality Monitoring System
+</div>
+
+<div>
+
+<a href="/dashboard" style="
+color:white;
+text-decoration:none;
+margin-right:20px;
+font-weight:bold;">
+Dashboard
+</a>
+
+<a href="/realtime" class="btn btn-success">
+    🌍 Real-Time AQI
+</a>
+
+<a href="/predict" style="
+color:white;
+text-decoration:none;
+margin-right:20px;
+font-weight:bold;">
+Predict AQI
+</a>
+
+<a href="/download" style="
+background:#2563eb;
+padding:10px 18px;
+border-radius:8px;
+color:white;
+text-decoration:none;
+font-weight:bold;">
+Download Report
+</a>
+
+{% if session.username %}
+
+<span style="
+color:white;
+margin-left:20px;
+font-weight:bold;
+">
+👤 {{session.username}}
+</span>
+
+<a href="/logout" style="
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:bold;
+">
+Logout
+</a>
+
+{% endif %}
+
+</div>
+
+</nav>
+
+
+<div class="header">
+
+<h1>🌍 Air Quality Monitoring Dashboard</h1>
+
+{% if session.username %}
+
+<p style="
+font-size:20px;
+margin-top:10px;
+color:#2563eb;
+font-weight:bold;
+">
+Welcome, {{session.username}} 👋
+</p>
+
+{% endif %}
+
+<p>AI Based AQI Prediction System</p>
+
+<form action="/dashboard" method="get">
+
+<select name="city">
+
+<option value="">
+Select City
+</option>
+
+
+{% for city in cities %}
+
+<option value="{{city}}">
+{{city}}
+</option>
+
+{% endfor %}
+
+
+</select>
+
+
+<button type="submit">
+View AQI
+</button>
+
+</div>
+
+</form>
+
+<div class="cards">
+
+<div class="card">
+
+    <h3>AQI Status</h3>
+
+    <div class="value">
+
+        {% if avg_aqi <= 50 %}
+        <span class="good">Good</span>
+
+        {% elif avg_aqi <= 100 %}
+        <span class="moderate">Moderate</span>
+
+        {% elif avg_aqi <= 200 %}
+        <span class="poor">Poor</span>
+
+        {% else %}
+        <span class="severe">Severe</span>
+
+        {% endif %}
+
+    </div>
+
+    <h2>{{ avg_aqi }}</h2>
+
+    <p>Overall AQI</p>
+
+</div>
+
+<div class="card">
+
+<h3>Maximum AQI</h3>
+
+<div class="value">
+{{ max_aqi }}
+</div>
+
+<p>Highest Recorded</p>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>Minimum AQI</h3>
+
+<div class="value">
+{{ min_aqi }}
+</div>
+
+<p>Lowest Recorded</p>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>Total Records</h3>
+
+<div class="value">
+{{ total_records }}
+</div>
+
+<p>Dataset Size</p>
+
+</div>
+
+</div>
+
+<div style="width:80%; margin:auto;">
+
+<h2>AQI Trend</h2>
+
+<h2>AQI Level Gauge</h2>
+
+<div id="gaugeChart"></div>
+
+<div id="aqiChart"></div>
+
+
+<h2>Pollution Level</h2>
+<p>
+PM2.5={{ pm25 }},
+PM10={{ pm10 }},
+NO2={{ no2 }},
+CO={{ co }},
+SO2={{ so2 }}
+</p>
+
+<div id="pollutionChart"></div>
+<h2>🤖 AI Prediction History</h2>
+
+<a href="/download">
+
+<button style="
+background:#2563eb;
+color:white;
+padding:12px 25px;
+border:none;
+border-radius:10px;
+cursor:pointer;">
+📥 Download Prediction Report
+</button>
+
+</a>
+
+<div id="predictionChart"></div>
+
+
+<table border="1" style="margin:auto; width:80%;">
+
+<tr>
+<th>Date</th>
+<th>PM2.5</th>
+<th>PM10</th>
+<th>NO2</th>
+<th>CO</th>
+<th>SO2</th>
+<th>AQI</th>
+<th>Status</th>
+</tr>
+
+
+{% for row in history_data %}
+
+<tr>
+
+<td>{{row.Date}}</td>
+<td>{{row["PM2.5"]}}</td>
+<td>{{row["PM10"]}}</td>
+<td>{{row.NO2}}</td>
+<td>{{row.CO}}</td>
+<td>{{row.SO2}}</td>
+<td>{{row.AQI}}</td>
+<td>{{row.Status}}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+
+<div class="cards">
+
+<div class="card">
+
+<h3>🌡 Temperature</h3>
+
+<div class="value">
+{{ temperature }}°C
+</div>
+
+<p>{{ description }}</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>💧 Humidity</h3>
+
+<div class="value">
+{{ humidity }}%
+</div>
+
+<p>Current Humidity</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>🌬 Wind Speed</h3>
+
+<div class="value">
+{{ wind }} m/s
+</div>
+
+<p>Current Wind</p>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+var aqiData = {{ aqi_values | tojson }};
+var days = {{ dates | tojson }};
+
+console.log(days);
+console.log(aqiData);
+
+Plotly.newPlot(
+    "aqiChart",
+    [
+        {
+            x: days,
+            y: aqiData,
+            type:"scatter",
+            mode:"lines+markers"
+        }
+    ],
+    {
+        title:"Weekly AQI Trend"
+    }
+);
+
+
+var pollution = {
+
+    labels:[
+        "PM2.5",
+        "PM10",
+        "NO2",
+        "CO",
+        "SO2"
+    ],
+
+   values:[
+    Number("{{ pm25 }}"),
+    Number("{{ pm10 }}"),
+    Number("{{ no2 }}"),
+    Number("{{ co }}"),
+    Number("{{ so2 }}")
+]
+};
+
+
+Plotly.newPlot(
+    "pollutionChart",
+    [
+        {
+            x: pollution.labels,
+            y: pollution.values,
+            type:"bar",
+            text: pollution.values,
+            textposition:"auto"
+        }
+    ],
+    {
+        title:"Pollution Components",
+        yaxis:{
+            title:"Concentration"
+        }
+    }
+);
+var gaugeValue = {{ avg_aqi }};
+
+
+Plotly.newPlot(
+    "gaugeChart",
+    [
+        {
+            type:"indicator",
+            mode:"gauge+number",
+            value:gaugeValue,
+
+            gauge:{
+                axis:{
+                    range:[0,500]
+                }
+            }
+        }
+    ],
+
+    {
+        title:"Current AQI Level"
+    }
+);
+
+</script>
+
+
+<footer style="
+margin-top:40px;
+background:#1f2937;
+color:white;
+padding:20px;
+text-align:center;
+">
+
+<p><b>Air Quality Prediction System</b></p>
+
+<p>
+Developed by Ayush Surve and Aditya Shinde| MSc Computer Science
+</p>
+
+<p>
+Machine Learning • Flask • Plotly • Python
+</p>
+
+</footer>
+
+
+
+<h3>🌍 Air Quality Prediction System</h3>
+
+<h2 style="text-align:center;margin-top:40px;">🤖 Model Performance</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>Model</h3>
+<div class="value" style="font-size:22px;">
+{{ model_name }}
+</div>
+</div>
+
+<div class="card">
+<h3>R² Score</h3>
+<div class="value">
+{{ r2_score }}
+</div>
+</div>
+
+<div class="card">
+    <h2>🌍</h2>
+    <h3>Real-Time AQI</h3>
+    <p>Check live AQI for any city using the WAQI API.</p>
+
+    <a href="/realtime"
+       style="
+       display:inline-block;
+       background:#16a34a;
+       color:white;
+       padding:10px 20px;
+       border-radius:8px;
+       text-decoration:none;
+       font-weight:bold;">
+       Open
+    </a>
+</div>
+
+<div class="card">
+    <h3>📋 Project Details</h3>
+
+    <p><b>Model:</b> Random Forest Regressor</p>
+    <p><b>Language:</b> Python</p>
+    <p><b>Framework:</b> Flask</p>
+    <p><b>Database:</b> SQLite</p>
+    <p><b>Live AQI:</b> WAQI API</p>
+</div>
+
+<div class="card">
+<h3>RMSE</h3>
+<div class="value">
+{{ rmse }}
+</div>
+</div>
+
+<div class="card">
+<h3>MAE</h3>
+<div class="value">
+{{ mae }}
+</div>
+</div>
+
+</div>
+
+<hr>
+
+...
+<!-- All dashboard content ends here -->
+
+<footer style="
+text-align:center;
+padding:20px;
+margin-top:30px;
+color:gray;
+border-top:1px solid #ddd;
+background:#f8f9fa;
+">
+
+Air Quality Prediction & Monitoring System © 2026<br>
+Developed by Ayush Surve
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+database.db
+predictions.csv
+output.txt
+.env

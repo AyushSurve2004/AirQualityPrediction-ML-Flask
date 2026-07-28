@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Prediction History</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f4f7fb;
+    text-align:center;
+}
+
+
+table{
+
+    margin:auto;
+    border-collapse:collapse;
+    background:white;
+
+}
+
+
+th,td{
+
+    padding:12px;
+    border:1px solid #ddd;
+
+}
+
+
+th{
+
+    background:#2563eb;
+    color:white;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<h1>📊 AQI Prediction History</h1>
+
+
+<table>
+
+<tr>
+
+<th>Date</th>
+<th>PM2.5</th>
+<th>PM10</th>
+<th>NO2</th>
+<th>CO</th>
+<th>SO2</th>
+<th>AQI</th>
+<th>Status</th>
+
+</tr>
+
+
+{% for row in tables %}
+
+<tr>
+
+<td>{{row.Date}}</td>
+<td>{{row["PM2.5"]}}</td>
+<td>{{row.PM10}}</td>
+<td>{{row.NO2}}</td>
+<td>{{row.CO}}</td>
+<td>{{row.SO2}}</td>
+<td>{{row.AQI}}</td>
+<td>{{row.Status}}</td>
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+
+</body>
+
+</html>
+<br>
+
+<a href="/download">
+
+<button style="
+padding:12px 25px;
+background:#2563eb;
+color:white;
+border:none;
+border-radius:10px;
+">
+
+📥 Download Report
+
+</button>
+
+</a>

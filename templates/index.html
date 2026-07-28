@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Air Quality Prediction System</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e3a8a);
+    color:white;
+}
+
+nav{
+    ...
+}
+
+/* Other CSS */
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:16px 40px;
+    margin:12px;
+    border-radius:50px;
+    text-decoration:none;
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:.5px;
+    transition:all .35s ease;
+    cursor:pointer;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+.primary{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:white;
+    border:2px solid rgba(255,255,255,0.15);
+
+}
+
+.primary:hover{
+    background:linear-gradient(135deg,#1d4ed8,#2563eb);
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(37,99,235,.45);
+}
+
+.secondary{
+
+    background:white;
+    color:#1e3a8a;
+    border:2px solid rgba(255,255,255,0.4);
+
+}
+
+.secondary:hover{
+    background:#dbeafe;
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(255,255,255,.35);
+}
+
+.btn:active{
+    transform:scale(.97);
+}
+
+/* Rest of your CSS */
+
+</style>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e3a8a);
+    color:white;
+}
+
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 60px;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-left:25px;
+    font-weight:bold;
+}
+
+.hero{
+    height:90vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    flex-direction:column;
+    padding:20px;
+}
+
+.hero h1{
+    font-size:60px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    font-size:22px;
+    width:70%;
+    line-height:1.7;
+    color:#dbeafe;
+}
+
+.buttons{
+    margin-top:40px;
+}
+
+
+.primary:hover{
+    transform:translateY(-6px) scale(1.05);
+    box-shadow:0 15px 35px rgba(37,99,235,0.5);
+}
+
+.secondary:hover{
+    transform:translateY(-6px) scale(1.05);
+    background:#dbeafe;
+}
+
+
+.btn:hover{
+    transform:translateY(-5px);
+}
+
+.features{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+    padding:60px;
+}
+
+.stats{
+
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+    padding:50px 20px;
+
+}
+
+
+.stat{
+
+    width:220px;
+    padding:30px;
+    text-align:center;
+    background:rgba(255,255,255,0.15);
+    border-radius:20px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    transition:.3s;
+
+}
+
+
+.stat:hover{
+
+    transform:translateY(-10px) scale(1.05);
+
+}
+
+
+.stat h1{
+
+    font-size:45px;
+    margin-bottom:10px;
+
+}
+
+
+.stat p{
+
+    font-size:18px;
+    color:#dbeafe;
+
+}
+
+.card{
+    width:250px;
+    background:white;
+    color:black;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(0,0,0,.3);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+}
+
+.card h2{
+    margin:15px 0;
+}
+
+.tech{
+    text-align:center;
+    padding:60px;
+}
+
+.tech h1{
+    margin-bottom:25px;
+}
+
+.badge{
+    display:inline-block;
+    background:#2563eb;
+    padding:12px 20px;
+    border-radius:30px;
+    margin:8px;
+}
+
+footer{
+    background:#111827;
+    text-align:center;
+    padding:30px;
+    margin-top:40px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+🌍 AQI Predictor
+</div>
+
+<div>
+
+<a href="/">Home</a>
+<a href="/dashboard">Dashboard</a>
+<a href="/predict">Predict AQI</a>
+<a href="/realtime">Real-Time AQI</a>
+
+{% if session.username %}
+
+<a href="/logout">
+Logout
+</a>
+
+{% else %}
+
+<a href="/login">
+Login
+</a>
+
+<a href="/register">
+Register
+</a>
+
+{% endif %}
+
+</div>
+
+</nav>
+
+<section class="hero">
+
+<h1>🌍 Air Quality Prediction System</h1>
+
+<p>
+AI-powered web application that predicts Air Quality Index using Machine Learning,
+displays live weather information, interactive dashboards, and pollution analysis.
+</p>
+
+<div class="buttons">
+
+<a href="/predict" class="btn primary">
+🚀 Predict AQI
+</a>
+
+<a href="/dashboard" class="btn secondary">
+📊 View Dashboard
+</a>
+
+</div>
+
+</section>
+
+<section class="stats">
+
+<div class="stat">
+<h1>50+</h1>
+<p>Cities Covered</p>
+</div>
+
+<div class="stat">
+<h1>25,000+</h1>
+<p>Air Quality Records</p>
+</div>
+
+<div class="stat">
+<h1>95%</h1>
+<p>Prediction Accuracy</p>
+</div>
+
+<div class="stat">
+<h1>24×7</h1>
+<p>Monitoring</p>
+</div>
+
+</section>
+
+<section class="features">
+
+<div class="card">
+<h2>🤖 AI Prediction</h2>
+<p>Predict AQI using a trained Machine Learning model.</p>
+</div>
+
+<div class="card">
+<h2>📊 Dashboard</h2>
+<p>Interactive graphs and pollution statistics.</p>
+</div>
+
+<div class="card">
+<h2>🌦 Live Weather</h2>
+<p>Current temperature, humidity and wind speed.</p>
+</div>
+
+<div class="card">
+<h2>📥 Reports</h2>
+<p>Download prediction history as a CSV report.</p>
+</div>
+
+</section>
+
+<section class="workflow">
+
+<h1>🔄 How It Works</h1>
+
+<div class="steps">
+
+<div class="step">
+<h2>1️⃣ Input Data</h2>
+<p>Enter pollution values like PM2.5, PM10, NO₂, CO and SO₂.</p>
+</div>
+
+<div class="step">
+<h2>2️⃣ AI Prediction</h2>
+<p>The trained Random Forest model predicts the Air Quality Index (AQI).</p>
+</div>
+
+<div class="step">
+<h2>3️⃣ Dashboard</h2>
+<p>View AQI status, weather data, pollution charts and prediction history.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="tech">
+
+<h1>Technologies Used</h1>
+
+<span class="badge">Python</span>
+<span class="badge">Flask</span>
+<span class="badge">Scikit-learn</span>
+<span class="badge">Plotly</span>
+<span class="badge">SQLite</span>
+<span class="badge">OpenWeather API</span>
+
+</section>
+
+
+<footer>
+
+<h2>🌍 Air Quality Prediction System</h2>
+
+<p>Developed by Ayush Surve & Aditya Shinde</p>
+
+<p>MSc Computer Science</p>
+
+<p>Machine Learning • Flask • Plotly • Python</p>
+
+</footer>
+
+</body>
+</html>

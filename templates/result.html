@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>AQI Prediction Result</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f4f7fb;
+    text-align:center;
+}
+
+
+.card{
+
+    background:white;
+    width:400px;
+    margin:70px auto;
+    padding:40px;
+    border-radius:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+
+}
+
+
+.aqi{
+
+    font-size:45px;
+    font-weight:bold;
+
+}
+
+
+.good{
+    color:green;
+}
+
+.moderate{
+    color:#d4a000;
+}
+
+.poor{
+    color:orange;
+}
+
+.severe{
+    color:red;
+}
+
+
+button{
+
+    padding:12px 25px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:10px;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="card">
+
+
+<h1>🌍 AQI Prediction Result</h1>
+
+
+<h2>Predicted AQI</h2>
+
+<div class="aqi">
+{{ prediction }}
+</div>
+
+
+<h2>Status</h2>
+
+
+<div class="{{ status }}">
+{{ status }}
+</div>
+
+
+<br>
+
+
+<a href="/predict">
+
+<button>
+Predict Again
+</button>
+
+</a>
+
+
+</div>
+
+
+</body>
+
+</html>
