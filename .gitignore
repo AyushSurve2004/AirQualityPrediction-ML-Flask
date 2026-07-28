@@ -5,3 +5,4 @@ database.db
 predictions.csv
 output.txt
 .env
+*.pkl
